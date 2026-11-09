@@ -1,0 +1,1 @@
+# smartkurnik.pl
