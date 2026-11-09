@@ -130,6 +130,10 @@ footer{padding:24px 0;color:var(--muted);font-size:.85rem;text-align:center}
           <i></i>
           <span><b>Pakiet Smart (+3 200 zł)</b><small>Czujniki, automatyczne drzwiczki, kamera, panel solarny, aplikacja.</small></span>
         </button>
+        <button class="sw" id="sw2" aria-pressed="false">
+          <i></i>
+          <span><b>Smart Plus (+3 100 zł)</b><small>Automatyczny karmnik, taśma na obornik, czujniki w gniazdach. Zawiera Smart.</small></span>
+        </button>
       </div>
       <div class="panel res">
         <div class="name" id="name"></div>
@@ -204,14 +208,16 @@ var M=[
  {n:"Kurnik XL",d:"do 20 kur · 3,0 × 2,0 m",p:17900,f:["Wzmocniona rama, 4 kółka","Ocieplenie 50 mm","8 gniazd, wejście dla człowieka"]}
 ];
 var S=["Czujnik temperatury i wilgotności","Drzwiczki automatyczne, kamera, panel solarny"];
-var cur=0,smart=false;
+var cur=0,smart=false,plus=false;
+var P=["Automatyczny karmnik","Taśma na obornik pod grzędą","Czujniki w gniazdach: kura siedzi, jajko gotowe"];
+function sync(){document.getElementById("sw").setAttribute("aria-pressed",smart);document.getElementById("sw2").setAttribute("aria-pressed",plus)}
 function fmt(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,"\u00a0")+"\u00a0zł"}
 function draw(){
   var m=M[cur];
-  document.getElementById("name").textContent=m.n+(smart?" Smart":"");
+  document.getElementById("name").textContent=m.n+(plus?" Smart Plus":smart?" Smart":"");
   document.getElementById("dim").textContent=m.d;
-  document.getElementById("price").textContent="od "+fmt(m.p+(smart?3200:0));
-  var items=m.f.concat(smart?S:[]);
+  document.getElementById("price").textContent="od "+fmt(m.p+(smart?3200:0)+(plus?3100:0));
+  var items=m.f.concat(smart?S:[]).concat(plus?P:[]);
   document.getElementById("list").innerHTML=items.map(function(t){return "<li>"+t+"</li>"}).join("");
 }
 document.querySelectorAll("#seg button").forEach(function(b){
@@ -222,8 +228,9 @@ document.querySelectorAll("#seg button").forEach(function(b){
   });
 });
 document.getElementById("sw").addEventListener("click",function(){
-  smart=!smart;this.setAttribute("aria-pressed",smart);draw();
+  smart=!smart;if(!smart)plus=false;sync();draw();
 });
+document.getElementById("sw2").addEventListener("click",function(){plus=!plus;if(plus)smart=true;sync();draw();});
 draw();
 </script>
 </body>
